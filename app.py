@@ -66,13 +66,25 @@ df = pd.DataFrame(
 # -----------------------------------------
 # LOAD MODEL
 # -----------------------------------------
+from sklearn.preprocessing import StandardScaler
+from sklearn.mixture import GaussianMixture
 
-model = pickle.load(open("model.pkl", "rb"))
-scaler = pickle.load(open("scaler.pkl", "rb"))
+scaler = StandardScaler()
 
-X_scaled = scaler.transform(df)
+X_scaled = scaler.fit_transform(df)
+
+model = GaussianMixture(
+    n_components=3,
+    random_state=42
+)
+
+model.fit(X_scaled)
 
 labels = model.predict(X_scaled)
+
+probabilities = model.predict_proba(X_scaled)
+
+
 
 probabilities = model.predict_proba(X_scaled)
 
